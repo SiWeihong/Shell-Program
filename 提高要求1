@@ -1,0 +1,53 @@
+%{
+#include "easytdata.h"
+int flag=0;
+int flag1=0;
+%}
+ignore_char [ \t\n]
+num [0-9]
+letter [a-zA-Z]
+%%
+{ignore_char} {
+	if(flag1 == 1)
+		return STRING;
+}
+"<"{
+	flag1 = 1;
+	if(flag == 1){
+		flag = 0;
+        return STRING;
+	}
+    return "<";
+}
+">"{
+	flag1 = 1;
+	if(flag == 1){
+		flag = 0;
+        return STRING;
+	}
+    return ">";
+}
+"&"{
+	flag1 = 1;
+	if(flag == 1){
+		flag = 0;
+        return STRING;
+	}
+    return "&";
+}
+{num}{
+	flag1 = 1;
+	flag = 1;
+}
+{letter}{
+	flag1 = 1;
+	flag = 1;
+}
+"{" {flag1 = 1;return L_BRACE;}
+"}" {flag1 = 1;return R_BRACE;}
+"[" {flag1 = 1;return L_BRACKET;}
+"]" {flag1 = 1;return R_BRACKET;}
+":" {flag1 = 1;return COLON;}
+";" {flag1 = 1;return SEMICOLON;}
+"," {flag1 = 1;return COMMA;}
+%%
